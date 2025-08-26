@@ -5,6 +5,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { STICKER_MULE_LOGO_SMALL } from '@/shared/const';
 import { getStickerData, StickerDataDto } from '@/api/api';
+import StickerVisualizer from '../components/StickerVisualizer';
 
 function VisualizerContent() {
   const searchParams = useSearchParams();
@@ -144,11 +145,14 @@ function VisualizerContent() {
 
       {/* White Content Section */}
       <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-sticker-brown mb-4">
-              Sticker Information
+              Interactive Sticker Preview
             </h2>
+            <p className="text-lg text-sticker-text mb-6">
+              See how your sticker looks on a MacBook Pro and drag it around to find the perfect placement
+            </p>
             <button
               onClick={() => router.push('/')}
               className="bg-sticker-orange hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200"
@@ -157,12 +161,8 @@ function VisualizerContent() {
             </button>
           </div>
 
-          {/* Simple Text Display */}
-          <div className="bg-sticker-gray rounded-lg p-8">
-            <pre className="text-sticker-text whitespace-pre-wrap font-mono text-sm leading-relaxed">
-              {JSON.stringify(stickerData, null, 2)}
-            </pre>
-          </div>
+          {/* Interactive Sticker Visualizer */}
+          <StickerVisualizer stickerData={stickerData} />
         </div>
       </div>
 
