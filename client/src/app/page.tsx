@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { STICKER_MULE_LOGO, STICKER_MULE_LOGO_SMALL } from '@/shared/const';
-import { getStickerData } from '@/app/api/api';
+import { STICKER_MULE_LOGO_SMALL } from '@/shared/const';
+import { getStickerData } from '@/api/api';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -36,8 +36,9 @@ export default function Home() {
     setLoading(true);
     
     try {
-      const stickerData = await getStickerData(url);
-      router.push(`/result?data=${encodeURIComponent(JSON.stringify(stickerData))}`);
+      // const stickerData = await getStickerData(url);
+      router.push(`/visualizer?url=${encodeURIComponent(url)}`);
+      // router.push(`/visualizer?url=${encodeURIComponent(JSON.stringify(stickerData))}`);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message); // ✅ Safe
@@ -137,22 +138,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="bg-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-3">
-            <p className="text-sticker-text">Powered by</p>
-            <Image
-              src={STICKER_MULE_LOGO}
-              alt="Sticker Mule"
-              width={120}
-              height={36}
-              className="opacity-75"
-              unoptimized
-            />
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
