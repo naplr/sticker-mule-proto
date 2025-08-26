@@ -11,14 +11,12 @@ interface StickerVisualizerProps {
   stickerData: StickerDataDto;
 }
 
-
 export default function StickerVisualizer({ stickerData }: StickerVisualizerProps) {
   // Initialize with the first sticker
   const [stickers, setStickers] = useState<StickerWithId[]>([
     { ...stickerData, id: crypto.randomUUID() }
   ]);
   const [stickerPositions, setStickerPositions] = useState<Record<string, { x: number; y: number }>>({});
-  const [resetTrigger, setResetTrigger] = useState<string | null>(null);
   const [newStickerUrl, setNewStickerUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -56,30 +54,6 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     }));
   };
 
-  const handleReset = (stickerId?: string) => {
-    if (stickerId) {
-      // Reset specific sticker
-      setResetTrigger(stickerId);
-      setStickerPositions(prev => ({
-        ...prev,
-        [stickerId]: { x: 0, y: 0 }
-      }));
-    } else {
-      // Reset all stickers
-      const resetPositions: Record<string, { x: number; y: number }> = {};
-      stickers.forEach(sticker => {
-        resetPositions[sticker.id] = { x: 0, y: 0 };
-      });
-      setStickerPositions(resetPositions);
-      setResetTrigger('all');
-    }
-  };
-
-  const handleResetComplete = (stickerId: string) => {
-    if (resetTrigger === stickerId || resetTrigger === 'all') {
-      setResetTrigger(null);
-    }
-  };
 
   const currentSpecs = MACBOOK_SPECS;
 
@@ -243,8 +217,6 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
                   containerHeight={containerDimensions.height}
                   zIndex={10 + index} // Higher index = higher z-index (on top)
                   onPositionChange={handlePositionChange}
-                  resetPosition={resetTrigger === sticker.id || resetTrigger === 'all'}
-                  onResetComplete={handleResetComplete}
                 />
               ))
             }
@@ -332,15 +304,6 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
                     </button>
                   )}
 
-                  <button
-                    onClick={() => handleReset(sticker.id)}
-                    className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                    title="Reset position"
-                  >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                    </svg>
-                  </button>
                   {stickers.length > 1 && (
                     <button
                       onClick={() => handleRemoveSticker(sticker.id)}

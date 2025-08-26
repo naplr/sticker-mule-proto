@@ -13,8 +13,6 @@ interface DraggableStickerProps {
   containerHeight: number;
   zIndex?: number;
   onPositionChange?: (id: string, x: number, y: number) => void;
-  resetPosition?: boolean;
-  onResetComplete?: (id: string) => void;
 }
 
 export default function DraggableSticker({
@@ -24,9 +22,7 @@ export default function DraggableSticker({
   containerWidth,
   containerHeight,
   zIndex = 10,
-  onPositionChange,
-  resetPosition = false,
-  onResetComplete
+  onPositionChange
 }: DraggableStickerProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const nodeRef = useRef(null);
@@ -58,11 +54,6 @@ export default function DraggableSticker({
     onPositionChange?.(id, newPosition.x, newPosition.y);
   };
 
-  // Reset position when resetPosition prop changes
-  if (resetPosition && (position.x !== 0 || position.y !== 0)) {
-    setPosition({ x: 0, y: 0 });
-    onResetComplete?.(id);
-  }
 
   return (
     <Draggable
