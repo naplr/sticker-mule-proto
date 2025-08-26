@@ -17,7 +17,10 @@ export default function Home() {
 
     try {
       // Validate using a single regex for the full URL
-      const regex = /^https?:\/\/www\.stickermule\.com\/[^\/]+\/item\/\d+(?:\?.*)?$/;
+      // Supports both formats:
+      // https://www.stickermule.com/marketplace/item/123
+      // https://www.stickermule.com/uk/herman/item/14591453
+      const regex = /^https?:\/\/www\.stickermule\.com\/[^\/]+(?:\/[^\/]+)?\/item\/\d+(?:\?.*)?$/;
       return regex.test(url);
     } catch {
       return false;

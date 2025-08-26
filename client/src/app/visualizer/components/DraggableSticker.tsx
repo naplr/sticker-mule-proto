@@ -54,7 +54,6 @@ export default function DraggableSticker({
     onPositionChange?.(id, newPosition.x, newPosition.y);
   };
 
-
   return (
     <Draggable
       nodeRef={nodeRef}
@@ -73,7 +72,6 @@ export default function DraggableSticker({
         }}
       >
         <div className="relative w-full h-full group">
-          {/* Sticker Image */}
           <Image
             src={stickerImage}
             alt="Draggable Sticker"
@@ -82,7 +80,6 @@ export default function DraggableSticker({
             unoptimized
           />
           
-          {/* Drag indicator on hover */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black bg-opacity-10 rounded">
             <div className="bg-white bg-opacity-80 rounded-full p-2">
               <Image
