@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"server/internal/handlers"
+	"server/internal/middleware"
 	"server/internal/services"
 )
 
@@ -17,7 +18,7 @@ func main() {
 	stickerHandler := handlers.NewStickerHandler(stickerService)
 
 	// Setup routes
-	http.HandleFunc("/process-sticker-url", stickerHandler.ProcessStickerURL)
+	http.HandleFunc("/process-sticker-url", middleware.CORS(stickerHandler.ProcessStickerURL))
 
 	port := ":8080"
 	fmt.Printf("Server starting on http://localhost%s\n", port)
