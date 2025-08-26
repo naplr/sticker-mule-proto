@@ -48,17 +48,6 @@ function VisualizerContent() {
         <div className="bg-sticker-orange">
           <div className="container mx-auto px-4 py-16 md:py-20">
             <div className="text-center text-white">
-              <div className="mb-8">
-                <Image
-                  src={STICKER_MULE_LOGO_SMALL}
-                  alt="Sticker Mule Logo"
-                  width={150}
-                  height={45}
-                  className="mx-auto mb-6 brightness-0 invert"
-                  priority
-                  unoptimized
-                />
-              </div>
               <h1 className="text-4xl md:text-6xl font-bold mb-4">
                 Loading...
               </h1>
@@ -79,17 +68,6 @@ function VisualizerContent() {
         <div className="bg-sticker-orange">
           <div className="container mx-auto px-4 py-16 md:py-20">
             <div className="text-center text-white">
-              <div className="mb-8">
-                <Image
-                  src={STICKER_MULE_LOGO_SMALL}
-                  alt="Sticker Mule Logo"
-                  width={150}
-                  height={45}
-                  className="mx-auto mb-6 brightness-0 invert"
-                  priority
-                  unoptimized
-                />
-              </div>
               <h1 className="text-4xl md:text-6xl font-bold mb-4">
                 Error
               </h1>
@@ -122,17 +100,6 @@ function VisualizerContent() {
       <div className="bg-sticker-orange">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="text-center text-white">
-            <div className="mb-8">
-              <Image
-                src={STICKER_MULE_LOGO_SMALL}
-                alt="Sticker Mule Logo"
-                width={150}
-                height={45}
-                className="mx-auto mb-6 brightness-0 invert"
-                priority
-                unoptimized
-              />
-            </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
               Sticker Visualizer
             </h1>
