@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
 interface DraggableStickerProps {
+  id: string;
   stickerImage: string;
   stickerSize: {
     width: number;
@@ -10,16 +11,19 @@ interface DraggableStickerProps {
   };
   containerWidth: number;
   containerHeight: number;
-  onPositionChange?: (x: number, y: number) => void;
+  zIndex?: number;
+  onPositionChange?: (id: string, x: number, y: number) => void;
   resetPosition?: boolean;
-  onResetComplete?: () => void;
+  onResetComplete?: (id: string) => void;
 }
 
 export default function DraggableSticker({
+  id,
   stickerImage,
   stickerSize,
   containerWidth,
   containerHeight,
+  zIndex = 10,
   onPositionChange,
   resetPosition = false,
   onResetComplete
@@ -51,13 +55,13 @@ export default function DraggableSticker({
   const handleDrag = (e: DraggableEvent, data: DraggableData) => {
     const newPosition = { x: data.x, y: data.y };
     setPosition(newPosition);
-    onPositionChange?.(newPosition.x, newPosition.y);
+    onPositionChange?.(id, newPosition.x, newPosition.y);
   };
 
   // Reset position when resetPosition prop changes
   if (resetPosition && (position.x !== 0 || position.y !== 0)) {
     setPosition({ x: 0, y: 0 });
-    onResetComplete?.();
+    onResetComplete?.(id);
   }
 
   return (
@@ -70,10 +74,11 @@ export default function DraggableSticker({
     >
       <div 
         ref={nodeRef}
-        className="sticker-handle cursor-move absolute z-10"
+        className="sticker-handle cursor-move absolute"
         style={{
           width: stickerDisplayWidth,
           height: stickerDisplayHeight,
+          zIndex: zIndex,
         }}
       >
         <div className="relative w-full h-full group">
