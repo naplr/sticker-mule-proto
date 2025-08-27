@@ -1,5 +1,15 @@
 # Interactive Sticker Visualizer
 
+## 🚨 Note to Sticker Mule Team :)
+
+While exploring the Sticker Mule site, I noticed a small glitch where the sticker size doesn’t update correctly when navigating between stickers—the display carries over from the previous item until the page is refreshed. From what I can tell, it may relate to React state not re-rendering properly during navigation. 
+
+I’m sorry to bring this up through the README, but I thought it might be helpful to share since I was already working on a related prototype.
+
+📹 **Recording**: [View recorded demonstration on Google Drive](https://drive.google.com/file/d/1ZE9U00NlNE34DXNIpIgytBxwDZQegoar/view)
+
+---
+
 A Next.js application that allows users to visualize and arrange stickers on a MacBook Pro laptop. Users can create sessions, add multiple stickers, drag them around, and save their arrangements.
 
 ## Features
