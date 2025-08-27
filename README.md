@@ -1,6 +1,6 @@
 # Interactive Sticker Visualizer
 
-## 🚨 Note to Sticker Mule Team (apologies for including this here:))
+## 🚨 Note to Sticker Mule Team (apologies for including this here 🙂)
 
 While exploring the Sticker Mule site, I noticed a small glitch where the sticker size doesn’t update correctly when navigating between stickers—the display carries over from the previous item until the page is refreshed. From what I can tell, it may relate to React state not re-rendering properly during navigation. 
 
