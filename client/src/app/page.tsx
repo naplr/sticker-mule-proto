@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Hero from '@/app/components/Hero';
 import { ErrorIcon, LoadingIcon } from '@/app/components/svgs';
 
 function generateRandomSessionId(): string {
@@ -50,19 +51,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Orange Header Section */}
-      <div className="bg-sticker-orange">
-        <div className="container mx-auto px-4 py-16 md:py-20">
-          <div className="text-center text-white">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              Sticker Visualizer
-            </h1>
-            <p className="text-xl md:text-2xl font-medium opacity-90">
-              Start or continue your sticker design session
-            </p>
-          </div>
-        </div>
-      </div>
+      <Hero />
 
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto">
