@@ -1,11 +1,5 @@
-interface StickerWithId {
-  id: string;
-  productImage: string;
-  size: {
-    width: number;
-    height: number;
-  };
-}
+import { StickerWithId } from '@/models/StickerWithId';
+import Image from 'next/image';
 
 interface StickerManagementProps {
   stickers: StickerWithId[];
@@ -34,9 +28,11 @@ export default function StickerManagement({
         {stickers.slice().reverse().map((sticker, index) => (
           <div key={sticker.id} className="flex items-center justify-between p-3 bg-white rounded border">
             <div className="flex items-center space-x-3">
-              <img 
+              <Image 
                 src={sticker.productImage} 
                 alt={`Sticker ${stickers.length - index}`}
+                width={32}
+                height={32}
                 className="w-8 h-8 object-cover rounded"
               />
               <div className="text-sm text-gray-500">
@@ -46,7 +42,7 @@ export default function StickerManagement({
                     (Layer {index === 0 ? 'Top' : index === stickers.length - 1 ? 'Bottom' : stickers.length - index})
                   </span>
                 </div>
-                <div className="text-gray-500">{sticker.size.width}" × {sticker.size.height}"</div>
+                <div className="text-gray-500">{sticker.size.width}&quot; × {sticker.size.height}&quot;</div>
               </div>
             </div>
             <div className="flex items-center space-x-1">

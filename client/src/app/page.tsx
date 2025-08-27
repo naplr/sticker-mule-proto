@@ -2,9 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { STICKER_MULE_LOGO_SMALL } from '@/shared/const';
-import { getStickerData } from '@/api/api';
 import { ErrorIcon, LoadingIcon } from '@/app/components/svgs';
 
 function generateRandomSessionId(): string {

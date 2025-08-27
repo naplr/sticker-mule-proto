@@ -25,7 +25,7 @@ COPY . .
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build the application
 RUN \
@@ -39,8 +39,8 @@ RUN \
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Create a non-root user to run the application
 RUN addgroup --system --gid 1001 nodejs
@@ -64,8 +64,8 @@ USER nextjs
 EXPOSE 8080
 
 # Set port for the application
-ENV PORT 8080
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=8080
+ENV HOSTNAME="0.0.0.0"
 
 # Start the application
 CMD ["node", "server.js"]
