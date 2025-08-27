@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { post } from './base';
+import { post, get } from './base';
 
 // TODO: Split these models to a separated file and add appropriate validation for DTO.
 
@@ -50,4 +49,9 @@ export async function getStickerData(url: string): Promise<StickerDataDto> {
 
 export async function saveSession(sessionData: SaveSessionDataRequest) {
   await post<SaveSessionDataRequest, null>('/save-session', sessionData);
+}
+
+export async function getSession(sessionId: string): Promise<SessionDataDto> {
+  const response = await get<SessionDataDto>('/get-session', { sessionId });
+  return response;
 }
