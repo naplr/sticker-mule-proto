@@ -46,10 +46,8 @@ export default function StickerVisualizer({ sessionId, setError, setLoading }: S
 
     const fetchData = async () => {
       try {
-        console.log('jkjk')
         setLoading(true);
         const data = await getSession(sessionId);
-        console.log(data)
         const newStickers: StickerWithId[] = [];
         const newStickerPositions: Record<string, Position> = {};
         (data.stickers || []).forEach((sticker: SaveStickerData) => {
@@ -70,7 +68,6 @@ export default function StickerVisualizer({ sessionId, setError, setLoading }: S
           setError('Unknown error occurred');
         }
       } finally {
-        console.log('akjkjk')
         setLoading(false);
       }
     };
@@ -162,11 +159,8 @@ export default function StickerVisualizer({ sessionId, setError, setLoading }: S
     };
 
     saveSession(sessionData)
-    console.log("save")
   };
   
-  console.log(stickers)
-  console.log(stickerPositions)
   return (
     <div className="w-full max-w-6xl mx-auto">
 

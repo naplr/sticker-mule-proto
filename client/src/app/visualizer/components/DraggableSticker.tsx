@@ -30,8 +30,6 @@ export default function DraggableSticker({
   const [position, setPosition] = useState({ ...initialPosition });
   const nodeRef = useRef(null);
 
-  console.log(id)
-  
   // Calculate sticker display size based on real-world dimensions
   // Assuming MacBook Pro 14" lid usable area is approximately 12.3" x 8.5"
   // Convert sticker size from inches to pixels with appropriate scaling
@@ -54,11 +52,8 @@ export default function DraggableSticker({
   };
 
   const handleDrag = (e: DraggableEvent, data: DraggableData) => {
-    console.log('draggging')
-    console.log(data)
     const newPosition = { x: data.x, y: data.y };
     setPosition(newPosition);
-    console.log(newPosition)
     onPositionChange?.(id, newPosition.x, newPosition.y);
   };
 
