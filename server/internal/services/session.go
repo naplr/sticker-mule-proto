@@ -39,6 +39,6 @@ func (s *SessionService) GetSession(sessionId string) (*models.GetSessionDataRes
 
 	// Mock response for now
 	return &models.GetSessionDataResponse{
-		Stickers: []models.StickerData{},
+		Stickers: []models.SavedStickerData{},
 	}, nil
 }

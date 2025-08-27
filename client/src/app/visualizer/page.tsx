@@ -8,7 +8,9 @@ import StickerVisualizer from './components/StickerVisualizer';
 function VisualizerContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  // const productUrl = searchParams.get('sessionId');
   const productUrl = searchParams.get('url');
+
   const [stickerData, setStickerData] = useState<StickerDataDto | null>(null);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(true);

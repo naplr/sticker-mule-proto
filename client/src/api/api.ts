@@ -17,9 +17,37 @@ interface GetStickerDataRequest {
   url: string
 }
 
+// TODO: Combine position with size, so we can share the interface.
+// TODO: Include z-index (order) to save as well.
+
+export interface Position {
+  x: number,
+  y: number
+}
+
+export interface SaveStickerData {
+  stickerId: string
+  url: string,
+  size: Size,
+  position: Position
+}
+
+export interface SessionDataDto {
+  stickers: SaveStickerData[]
+}
+
+export interface SaveSessionDataRequest {
+  sessionId: string,
+  stickers: SaveStickerData[]
+}
+
 export async function getStickerData(url: string): Promise<StickerDataDto> {
   // TODO: Handle the case where it's 400, especially when the product is not a sticker.
-  // Maybe do it in page.tsx
+  // Maybe do it in page.tsx.
   const response = await post<GetStickerDataRequest, StickerDataDto>('/process-sticker-url', { url });
   return response;
+}
+
+export async function saveSession(sessionData: SaveSessionDataRequest) {
+  await post<SaveSessionDataRequest, null>('/save-session', sessionData);
 }

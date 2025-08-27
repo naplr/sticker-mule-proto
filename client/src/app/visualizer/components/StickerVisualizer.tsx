@@ -2,13 +2,14 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 import { StickerWithId } from '@/models/StickerWithId';
-import { StickerDataDto, getStickerData } from '@/api/api';
+import { SaveSessionDataRequest, StickerDataDto, saveSession } from '@/api/api';
 
 import DraggableSticker from './DraggableSticker';
 import StickerManagement from './StickerManagement';
 import AdditionalInfo from './AdditionalInfo';
 import InstructionsOverlay from './InstructionsOverlay';
 import AddSticker from './AddSticker';
+import { Position } from '@/api/api';
 
 interface StickerVisualizerProps {
   stickerData: StickerDataDto;
@@ -16,11 +17,10 @@ interface StickerVisualizerProps {
 
 export default function StickerVisualizer({ stickerData }: StickerVisualizerProps) {
   const [stickers, setStickers] = useState<StickerWithId[]>([]);
-  const [stickerPositions, setStickerPositions] = useState<Record<string, { x: number; y: number }>>({});
+  const [stickerPositions, setStickerPositions] = useState<Record<string, Position>>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
 
-  // MacBook Pro 14" lid dimensions (usable area for stickers)
   const MACBOOK_SPECS = {
     lidWidth: 12.3, // inches
     lidHeight: 8.5,  // inches
@@ -65,11 +65,12 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
   const handleMoveUp = (stickerId: string) => {
     setStickers(prev => {
       const currentIndex = prev.findIndex(sticker => sticker.id === stickerId);
-      if (currentIndex === prev.length - 1) return prev; // Already at top
+      if (currentIndex === prev.length - 1) {
+        return prev; // Already at top
+      }
       
       const newStickers = [...prev];
-      [newStickers[currentIndex], newStickers[currentIndex + 1]] = 
-      [newStickers[currentIndex + 1], newStickers[currentIndex]];
+      [newStickers[currentIndex], newStickers[currentIndex + 1]] = [newStickers[currentIndex + 1], newStickers[currentIndex]];
       return newStickers;
     });
   };
@@ -78,11 +79,12 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
   const handleMoveDown = (stickerId: string) => {
     setStickers(prev => {
       const currentIndex = prev.findIndex(sticker => sticker.id === stickerId);
-      if (currentIndex === 0) return prev; // Already at bottom
+      if (currentIndex === 0) {
+        return prev;
+      }
       
       const newStickers = [...prev];
-      [newStickers[currentIndex], newStickers[currentIndex - 1]] = 
-      [newStickers[currentIndex - 1], newStickers[currentIndex]];
+      [newStickers[currentIndex], newStickers[currentIndex - 1]] = [newStickers[currentIndex - 1], newStickers[currentIndex]];
       return newStickers;
     });
   };
@@ -91,8 +93,50 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     setStickers(prev => [...prev, sticker]);
   };
 
+  const handleSaveSession = () => {
+    const sessionData: SaveSessionDataRequest = {
+      sessionId: "xyz",
+      stickers: stickers.map(sticker => {
+        return {
+          stickerId: sticker.id,
+          url: sticker.productImage,
+          size: sticker.size,
+          position: stickerPositions[sticker.id] || { x: 0, y: 0 }
+        }
+      })
+    };
+
+    saveSession(sessionData)
+    
+    console.log('=== Session Data ===');
+    console.log('Total Stickers:', sessionData.stickers.length);
+    console.log('\nSticker Details:');
+    sessionData.stickers.forEach((sticker, index) => {
+      console.log(`\nSticker ${index + 1}:`);
+      console.log('  ID:', sticker.stickerId);
+      console.log('  Image URL:', sticker.url);
+      console.log('  Size:', `${sticker.size.width}" × ${sticker.size.height}"`);
+      console.log('  Position:', `x: ${sticker.position.x}px, y: ${sticker.position.y}px`);
+    });
+    console.log('\nFull Session JSON:');
+    console.log(JSON.stringify(sessionData, null, 2));
+    console.log('===================');
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto">
+
+      {/* Save Session Button */}
+      <div className="mb-4 flex justify-end">
+        <button
+          onClick={handleSaveSession}
+          className="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
+          disabled={stickers.length === 0}
+        >
+          Save Session
+        </button>
+      </div>
+
       <AddSticker onAddSticker={handleAddSticker} />
 
       <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 rounded-2xl p-8 shadow-2xl">
