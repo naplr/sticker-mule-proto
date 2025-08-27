@@ -95,7 +95,6 @@ func getSize(productPreview *html.Node) (float64, float64, error) {
 	if err != nil {
 		return 0, 0, err
 	}
-	println(sizeText)
 
 	parts := strings.FieldsFunc(sizeText, func(r rune) bool {
 		return r == '×'

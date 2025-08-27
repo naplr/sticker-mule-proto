@@ -53,6 +53,13 @@ func (h *StickerHandler) ProcessStickerURL(w http.ResponseWriter, req *http.Requ
 
 	stickerData, err := h.stickerService.FetchProductInfo(dat.URL)
 	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		if err.Error() == "product is not a sticker" {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Product is not a sticker"})
+			return
+		}
+
 		http.Error(w, "Failed to fetch or parse product information", http.StatusInternalServerError)
 		return
 	}

@@ -25,7 +25,6 @@ export default function StickerVisualizer({ sessionId, setError, setLoading }: S
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [sessionUrl, setSessionUrl] = useState<string>('');
   const [copySuccess, setCopySuccess] = useState(false);
-  // const [sessionData, setSessionData] = useState<SessionDataDto | null>(null);
 
   const MACBOOK_SPECS = {
     lidWidth: 12.3, // inches
@@ -53,7 +52,7 @@ export default function StickerVisualizer({ sessionId, setError, setLoading }: S
         console.log(data)
         const newStickers: StickerWithId[] = [];
         const newStickerPositions: Record<string, Position> = {};
-        data.stickers.forEach((sticker: SaveStickerData) => {
+        (data.stickers || []).forEach((sticker: SaveStickerData) => {
           newStickers.push({
             id: sticker.stickerId,
             productImage: sticker.url,
@@ -133,6 +132,10 @@ export default function StickerVisualizer({ sessionId, setError, setLoading }: S
 
   const handleAddSticker = (sticker: StickerWithId) => {
     setStickers(prev => [...prev, sticker]);
+
+    const newStickerPositions = { ...stickerPositions };
+    newStickerPositions[sticker.id] = { x: 0, y: 0 };
+    setStickerPositions(newStickerPositions)
   };
 
   const handleCopyUrl = async () => {
@@ -159,23 +162,11 @@ export default function StickerVisualizer({ sessionId, setError, setLoading }: S
     };
 
     saveSession(sessionData)
-    
-    console.log('=== Session Data ===');
-    console.log('Session ID:', sessionId);
-    console.log('Total Stickers:', sessionData.stickers.length);
-    console.log('\nSticker Details:');
-    sessionData.stickers.forEach((sticker, index) => {
-      console.log(`\nSticker ${index + 1}:`);
-      console.log('  ID:', sticker.stickerId);
-      console.log('  Image URL:', sticker.url);
-      console.log('  Size:', `${sticker.size.width}" × ${sticker.size.height}"`);
-      console.log('  Position:', `x: ${sticker.position.x}px, y: ${sticker.position.y}px`);
-    });
-    console.log('\nFull Session JSON:');
-    console.log(JSON.stringify(sessionData, null, 2));
-    console.log('===================');
+    console.log("save")
   };
   
+  console.log(stickers)
+  console.log(stickerPositions)
   return (
     <div className="w-full max-w-6xl mx-auto">
 

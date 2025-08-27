@@ -22,6 +22,8 @@ export default function Info() {
             <br /><br />
             <span className="font-medium">Accepted URL:</span> https://www.stickermule.com/[store]/item/[item-id]
             <br />
+            <span className="font-medium">Note:</span> Only work with a sticker product!
+            <br /><br />
             <span className="font-medium">Example:</span> 
             <br />
             - https://www.stickermule.com/herman/item/14591453 <br />

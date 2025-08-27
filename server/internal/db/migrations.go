@@ -21,8 +21,8 @@ func (c *Client) InitializeDatabase(ctx context.Context) error {
 					session_id VARCHAR(255) NOT NULL,
 					sticker_id VARCHAR(255) NOT NULL,
 					url VARCHAR(500) NOT NULL,
-					width INTEGER,
-					height INTEGER,
+					width FLOAT,
+					height FLOAT,
 					x INTEGER,
 					y INTEGER
 				);
@@ -35,6 +35,15 @@ func (c *Client) InitializeDatabase(ctx context.Context) error {
 				ALTER TABLE sessions 
 				DROP COLUMN IF EXISTS created_at,
 				DROP COLUMN IF EXISTS updated_at;
+			`,
+		},
+		{
+			Version:     3,
+			Description: "Change width and height to FLOAT",
+			SQL: `
+				ALTER TABLE sessions 
+				ALTER COLUMN width TYPE FLOAT,
+				ALTER COLUMN height TYPE FLOAT;
 			`,
 		},
 	}

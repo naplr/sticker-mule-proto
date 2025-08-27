@@ -14,7 +14,6 @@ type Path struct {
 }
 
 func BFS(n *html.Node, tag string, targetAttribute string, targetValue string) (*html.Node, error) {
-	println("Searching for tag:", tag, "with", targetAttribute, "=", targetValue)
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		if c.Type == html.ElementNode && c.Data == tag {
 			if targetAttribute == "" {
