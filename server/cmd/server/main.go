@@ -42,7 +42,7 @@ func main() {
 	stickerService := services.NewStickerService()
 	stickerHandler := handlers.NewStickerHandler(stickerService)
 
-	sessionService := services.NewSessionService()
+	sessionService := services.NewSessionService(dbClient)
 	sessionHandler := handlers.NewSessionHandler(sessionService)
 
 	http.HandleFunc("/process-sticker-url", middleware.CORS(stickerHandler.ProcessStickerURL))

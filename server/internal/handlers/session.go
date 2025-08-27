@@ -30,8 +30,8 @@ func (h *SessionHandler) SaveSession(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Call sessionService saveSession
-	if err := h.sessionService.SaveSession(&dat); err != nil {
+	// Call sessionService saveSession with context
+	if err := h.sessionService.SaveSession(req.Context(), &dat); err != nil {
 		http.Error(w, "Failed to save session data", http.StatusInternalServerError)
 		return
 	}
@@ -54,8 +54,8 @@ func (h *SessionHandler) GetSession(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Call sessionService getSession
-	sessionData, err := h.sessionService.GetSession(sessionId)
+	// Call sessionService getSession with context
+	sessionData, err := h.sessionService.GetSession(req.Context(), sessionId)
 	if err != nil {
 		http.Error(w, "Failed to fetch session data", http.StatusInternalServerError)
 		return

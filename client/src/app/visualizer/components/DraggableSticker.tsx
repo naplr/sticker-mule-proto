@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import Image from 'next/image';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import { Position } from '@/api/api';
 
 interface DraggableStickerProps {
   id: string;
@@ -12,6 +13,7 @@ interface DraggableStickerProps {
   containerWidth: number;
   containerHeight: number;
   zIndex?: number;
+  initialPosition: Position;
   onPositionChange?: (id: string, x: number, y: number) => void;
 }
 
@@ -22,9 +24,10 @@ export default function DraggableSticker({
   containerWidth,
   containerHeight,
   zIndex = 10,
+  initialPosition,
   onPositionChange
 }: DraggableStickerProps) {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ ...initialPosition });
   const nodeRef = useRef(null);
   
   // Calculate sticker display size based on real-world dimensions

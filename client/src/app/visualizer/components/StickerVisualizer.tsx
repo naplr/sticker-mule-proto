@@ -2,24 +2,30 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 import { StickerWithId } from '@/models/StickerWithId';
-import { SaveSessionDataRequest, StickerDataDto, saveSession } from '@/api/api';
+import { SaveSessionDataRequest, SaveStickerData, saveSession } from '@/api/api';
 
 import DraggableSticker from './DraggableSticker';
 import StickerManagement from './StickerManagement';
-import AdditionalInfo from './AdditionalInfo';
+import Info from './Info';
 import InstructionsOverlay from './InstructionsOverlay';
 import AddSticker from './AddSticker';
-import { Position } from '@/api/api';
+import { Position, getSession } from '@/api/api';
 
 interface StickerVisualizerProps {
-  stickerData: StickerDataDto;
+  sessionId: string;
+  setError: (error: string) => void;
+  setLoading: (loading: boolean) => void;
 }
 
-export default function StickerVisualizer({ stickerData }: StickerVisualizerProps) {
+export default function StickerVisualizer({ sessionId, setError, setLoading }: StickerVisualizerProps) {
+  // TODO: Consolidate stickers and stickerPositions.
   const [stickers, setStickers] = useState<StickerWithId[]>([]);
   const [stickerPositions, setStickerPositions] = useState<Record<string, Position>>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+  const [sessionUrl, setSessionUrl] = useState<string>('');
+  const [copySuccess, setCopySuccess] = useState(false);
+  // const [sessionData, setSessionData] = useState<SessionDataDto | null>(null);
 
   const MACBOOK_SPECS = {
     lidWidth: 12.3, // inches
@@ -39,9 +45,48 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
       }
     };
 
+    const fetchData = async () => {
+      try {
+        console.log('jkjk')
+        setLoading(true);
+        const data = await getSession(sessionId);
+        console.log(data)
+        const newStickers: StickerWithId[] = [];
+        const newStickerPositions: Record<string, Position> = {};
+        data.stickers.forEach((sticker: SaveStickerData) => {
+          newStickers.push({
+            id: sticker.stickerId,
+            productImage: sticker.url,
+            size: sticker.size,
+          });
+          newStickerPositions[sticker.stickerId] = sticker.position;
+        });
+
+        setStickers(newStickers);
+        setStickerPositions(newStickerPositions)
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Unknown error occurred');
+        }
+      } finally {
+        console.log('akjkjk')
+        setLoading(false);
+      }
+    };
+
     updateDimensions();
+    fetchData();
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
+  }, [sessionId, setError, setLoading]);
+
+  // Set session URL when component mounts
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSessionUrl(window.location.href);
+    }
   }, []);
 
   const handlePositionChange = (stickerId: string, x: number, y: number) => {
@@ -51,7 +96,6 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     }));
   };
 
-  // Remove sticker functionality
   const handleRemoveSticker = (stickerId: string) => {
     setStickers(prev => prev.filter(sticker => sticker.id !== stickerId));
     setStickerPositions(prev => {
@@ -61,7 +105,6 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     });
   };
 
-  // Move sticker up in order (higher z-index)
   const handleMoveUp = (stickerId: string) => {
     setStickers(prev => {
       const currentIndex = prev.findIndex(sticker => sticker.id === stickerId);
@@ -75,7 +118,6 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     });
   };
 
-  // Move sticker down in order (lower z-index)
   const handleMoveDown = (stickerId: string) => {
     setStickers(prev => {
       const currentIndex = prev.findIndex(sticker => sticker.id === stickerId);
@@ -93,9 +135,19 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     setStickers(prev => [...prev, sticker]);
   };
 
+  const handleCopyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(sessionUrl);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy URL:', err);
+    }
+  };
+
   const handleSaveSession = () => {
     const sessionData: SaveSessionDataRequest = {
-      sessionId: "xyz",
+      sessionId: sessionId,
       stickers: stickers.map(sticker => {
         return {
           stickerId: sticker.id,
@@ -109,6 +161,7 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     saveSession(sessionData)
     
     console.log('=== Session Data ===');
+    console.log('Session ID:', sessionId);
     console.log('Total Stickers:', sessionData.stickers.length);
     console.log('\nSticker Details:');
     sessionData.stickers.forEach((sticker, index) => {
@@ -122,12 +175,32 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
     console.log(JSON.stringify(sessionData, null, 2));
     console.log('===================');
   };
-
+  
   return (
     <div className="w-full max-w-6xl mx-auto">
 
-      {/* Save Session Button */}
-      <div className="mb-4 flex justify-end">
+      <Info />
+
+      {/* Session Info and Save Button */}
+      <div className="mb-4 flex justify-between items-center">
+        <div className="flex items-center gap-4 text-sm">
+          <span className="text-gray-600">
+            Session ID: <span className="font-mono text-gray-800">{sessionId}</span>
+          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600">URL:</span>
+            <code className="text-xs bg-gray-100 px-2 py-1 rounded max-w-xs truncate">
+              {sessionUrl || 'Loading...'}
+            </code>
+            <button
+              onClick={handleCopyUrl}
+              className="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+              title="Copy URL to clipboard"
+            >
+              {copySuccess ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+        </div>
         <button
           onClick={handleSaveSession}
           className="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
@@ -166,6 +239,7 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
                   containerWidth={containerDimensions.width}
                   containerHeight={containerDimensions.height}
                   zIndex={10 + index} // Higher index = higher z-index (on top)
+                  initialPosition={stickerPositions[sticker.id]}
                   onPositionChange={handlePositionChange}
                 />
               ))
@@ -202,7 +276,7 @@ export default function StickerVisualizer({ stickerData }: StickerVisualizerProp
         onRemoveSticker={handleRemoveSticker}
       />
 
-      <AdditionalInfo />
+
     </div>
   );
 }

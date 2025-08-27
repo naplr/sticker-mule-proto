@@ -2,48 +2,26 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getStickerData, StickerDataDto } from '@/api/api';
 import StickerVisualizer from './components/StickerVisualizer';
 
 function VisualizerContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  // const productUrl = searchParams.get('sessionId');
-  const productUrl = searchParams.get('url');
+  const sessionId = searchParams.get('sessionId');
 
-  const [stickerData, setStickerData] = useState<StickerDataDto | null>(null);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!productUrl) {
-      setError('No product URL provided');
+    if (!sessionId) {
+      setError('No session ID provided');
       setLoading(false);
       return;
     }
-
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await getStickerData(productUrl);
-        setStickerData(data);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('Unknown error occurred');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [productUrl]);
+  }, [sessionId]);
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Orange Header Section */}
       <div className="bg-sticker-orange">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="text-center text-white">
@@ -68,23 +46,27 @@ function VisualizerContent() {
       {error && !loading && (
         <div className="container mx-auto px-4 py-16 text-center text-white">
           <h2 className="text-xl md:text-2xl font-bold mb-4 text-gray-700">
-            Error: {error || 'Failed to load sticker data'}
+            Error: {error || 'Failed to load session data'}
           </h2>
           <div className="max-w-2xl mx-auto text-center">
             <button
               onClick={() => router.push('/')}
               className="bg-sticker-orange hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200 text-xl"
             >
-              ← Go Back
+              Go Back
             </button>
           </div>
         </div>
       )}
 
-      { stickerData && (
+      { sessionId && (
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-6xl mx-auto">
-            <StickerVisualizer stickerData={stickerData} />
+            <StickerVisualizer 
+              sessionId={sessionId}
+              setError={setError}
+              setLoading={setLoading}
+            />
           </div>
         </div>
       )}

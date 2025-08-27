@@ -28,14 +28,16 @@ export default function AddSticker({ onAddSticker }: AddStickerProps) {
     e.preventDefault();
     setError('');
 
-    if (!validateUrl(newStickerUrl)) {
+    const cleanedUrl = newStickerUrl.trim();
+
+    if (!validateUrl(cleanedUrl)) {
       setError('The URL is not valid');
       return;
     }
 
     setLoading(true);
     try {
-      const newStickerData = await getStickerData(newStickerUrl);
+      const newStickerData = await getStickerData(cleanedUrl);
       const newSticker: StickerWithId = {
         ...newStickerData,
         id: crypto.randomUUID()
