@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import { Position } from '@/api/api';
 
-interface DraggableStickerProps {
+interface Props {
   id: string;
   stickerImage: string;
   stickerSize: {
@@ -26,7 +26,7 @@ export default function DraggableSticker({
   zIndex = 10,
   initialPosition,
   onPositionChange
-}: DraggableStickerProps) {
+}: Props) {
   const [position, setPosition] = useState({ ...initialPosition });
   const nodeRef = useRef(null);
 

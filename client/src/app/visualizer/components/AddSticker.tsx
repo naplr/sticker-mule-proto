@@ -6,11 +6,11 @@ import { getStickerData } from '@/api/api';
 import { LoadingIcon, ErrorIcon } from '@/app/components/svgs';
 import { StickerWithId } from '@/models/StickerWithId';
 
-interface AddStickerProps {
+interface Props {
   onAddSticker: (sticker: StickerWithId) => void;
 }
 
-export default function AddSticker({ onAddSticker }: AddStickerProps) {
+export default function AddSticker({ onAddSticker }: Readonly<Props>) {
   const [newStickerUrl, setNewStickerUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

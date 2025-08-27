@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { DownCaretIcon, RemoveIcon, UpCaretIcon } from '@/app/components/svgs';
 import { StickerWithId } from '@/models/StickerWithId';
 
-interface StickerManagementProps {
+interface Props {
   stickers: StickerWithId[];
   onMoveUp: (stickerId: string) => void;
   onMoveDown: (stickerId: string) => void;
@@ -14,7 +14,7 @@ export default function StickerManagement({
   onMoveUp,
   onMoveDown,
   onRemoveSticker
-}: StickerManagementProps) {
+}: Readonly<Props>) {
   // Only show management panel if there are multiple stickers
   if (stickers.length <= 1) {
     return null;

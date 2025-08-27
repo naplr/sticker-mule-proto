@@ -11,13 +11,13 @@ import InstructionsOverlay from './InstructionsOverlay';
 import AddSticker from './AddSticker';
 import { Position, getSession } from '@/api/api';
 
-interface StickerVisualizerProps {
+interface Props {
   sessionId: string;
   setError: (error: string) => void;
   setLoading: (loading: boolean) => void;
 }
 
-export default function StickerVisualizer({ sessionId, setError, setLoading }: StickerVisualizerProps) {
+export default function StickerVisualizer({ sessionId, setError, setLoading }: Readonly<Props>) {
   // TODO: Consolidate stickers and stickerPositions.
   const [stickers, setStickers] = useState<StickerWithId[]>([]);
   const [stickerPositions, setStickerPositions] = useState<Record<string, Position>>({});
