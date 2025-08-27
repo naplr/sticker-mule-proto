@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Interactive Sticker Visualizer
 
-## Getting Started
+A Next.js application that allows users to visualize and arrange stickers on a MacBook Pro laptop. Users can create sessions, add multiple stickers, drag them around, and save their arrangements.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Session Management**: Create new sessions or load existing ones with 8-character session IDs
+- **Drag & Drop**: Interactive sticker placement on a MacBook Pro mockup
+- **Layer Management**: Reorder stickers (bring to front/send to back)
+- **Session Saving**: Save sticker arrangements with positions
+- **URL Sharing**: Copy session URLs to share configurations
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Screenshots
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Landing Page
+![Landing Page](screenshots/landing-page.png)
+*Choose to enter an existing session ID or create a new session*
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Visualizer Interface
+![Sticker Visualizer](screenshots/visualizer-main.png)
+*Main visualizer interface showing stickers on MacBook Pro*
 
-## Learn More
+### Session Management
+![Session Info](screenshots/session-info.png)
+*Session ID display and URL copying functionality*
 
-To learn more about Next.js, take a look at the following resources:
+### Sticker Management
+![Sticker Management](screenshots/sticker-management.png)
+*Layer management and sticker controls*
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend**: Next.js 15 with TypeScript
+- **Backend**: Go webserver
+- **Styling**: Tailwind CSS
+- **Deployment**: Docker + Google Cloud Platform
+- **Database**: Postgresql
 
-## Deploy on Vercel
+## Key Components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Session Management
+- **Session ID Generation**: 8-character alphanumeric IDs
+- **URL Parameters**: Sessions accessible via `?sessionId=ABC123XY`
+- **Persistence**: Save/load sticker arrangements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Sticker Visualizer
+- **Interactive Canvas**: MacBook Pro background with draggable stickers
+- **Real-time Positioning**: Live coordinate tracking
+- **Size Calculations**: Coverage percentage display
+- **Layer Control**: Z-index management for overlapping stickers
